@@ -69,7 +69,7 @@ def load_positive(n: int)->list[str]:
 	positive = train_pos.copy()
 	positive.extend(test_pos)
 	random.shuffle(positive)
-	
+
 	content = [get_content(fname) for fname in positive[:n]]
 	return content
 
@@ -85,5 +85,5 @@ def load_negative(n: int)->list[str]:
 	return content
 
 def get_content(fname: str)->str:
-	with open(fname, 'r') as f:
+	with open(fname, 'r', encoding='utf-8') as f:
 		return ' '.join(f.readlines())
