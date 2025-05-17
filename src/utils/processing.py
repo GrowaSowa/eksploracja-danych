@@ -1,4 +1,5 @@
 import re
+import numpy as np
 
 REMOVE_RE = '<br \/>'
 SEPARATE_RE = '\.|!\?|!|\?'
@@ -14,11 +15,11 @@ def split_unigrams(data: dict[str, list[str]])->dict[str, list[list[str]]]:
 	}
 
 
-def get_top_unigrams(n: int, data: dict[str, list[list[str]]])->dict[str, int]:
+def get_top_unigrams(n: int, token_list_dict: dict[str, list[list[str]]])->list[str]:
 	unigrams = {}
 
-	for key in data:
-		for token_list in data[key]:
+	for key in token_list_dict:
+		for token_list in token_list_dict[key]:
 			for token in token_list:
 				if token in unigrams:
 					unigrams[token] += 1
@@ -27,4 +28,20 @@ def get_top_unigrams(n: int, data: dict[str, list[list[str]]])->dict[str, int]:
 	
 	ulist = list(unigrams.items())
 	ulist.sort(key=lambda t: t[1], reverse=True)
-	return ulist[:n] if n>0 else ulist
+	return [item[0] for item in ulist[:n]] if n>0 else [item[0] for item in ulist]
+
+def get_unigram_sets(token_list_dict: dict[str, list[list[str]]])->dict[str, list[set[str]]]:
+	return {
+		"positive": [set(token_list) for token_list in token_list_dict['positive']],
+		"negative": [set(token_list) for token_list in token_list_dict['negative']]
+	}
+
+def get_unigram_presence_matrix(token_set: set[str], top_unigrams: list[str])->np.ndarray:
+	return np.array([int(unigram in token_set) for unigram in top_unigrams])
+
+
+def get_unigram_presence_matrices(token_set_dict: dict[str, list[set[str]]], top_unigrams: list[str])->dict[str, list[np.ndarray]]:
+	return {
+		"positive": [get_unigram_presence_matrix(tset, top_unigrams) for tset in token_set_dict['positive']],
+		"negative": [get_unigram_presence_matrix(tset, top_unigrams) for tset in token_set_dict['negative']]
+	}
