@@ -1,13 +1,14 @@
 import re
 import numpy as np
 
-REMOVE_RE = '<br \/>'
-SEPARATE_RE = '\.|!\?|!|\?'
+REMOVE_RE = ' *<br \/> *'
+SEPARATE_RE = ' *(\.|!\?|!|\?) *'
 
 def split_unigrams(data: dict[str, list[str]])->dict[str, list[list[str]]]:
 	def process_tokens(line: str):
-		r = re.sub(REMOVE_RE, '', line)
-		return re.sub(SEPARATE_RE, lambda m: f' {m[0]}', r).split(' ')
+		r = re.sub(REMOVE_RE, ' ', line)
+		r = re.sub(SEPARATE_RE, lambda m: f' {m[0].strip()} ', r).strip()
+		return re.sub(' {2,}', ' ', r).split(' ')
 
 	return {
 		"positive": [process_tokens(line) for line in data['positive']],
