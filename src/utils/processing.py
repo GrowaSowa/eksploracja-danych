@@ -55,12 +55,13 @@ def get_unigram_presence_matrices(token_set_dict: dict[str, list[set[str]]], top
 		"negative": [get_unigram_presence_matrix(tset, top_unigrams) for tset in token_set_dict['negative']]
 	}
 
-def get_stopwords(download: bool = False):
-	if download:
-		nltk.download('stopwords')
+def get_stopwords():
 	stopwords = list(nltk.corpus.stopwords.words('english'))
 	stopwords.extend(ADDITIONAL_STOPWORDS)
 	return stopwords
+
+def download_stopwords():
+	nltk.download('stopwords')
 
 def download_lemmatizer():
 	nltk.download('wordnet')
