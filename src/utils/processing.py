@@ -27,13 +27,11 @@ def split_unigrams(data: dict[str, list[str]])->dict[str, list[list[str]]]:
 def get_top_unigrams(n: int, token_list_dict: dict[str, list[list[str]]])->list[str]:
 	unigrams = {}
 
+	# TODO: parallel processing
 	for key in token_list_dict:
 		for token_list in token_list_dict[key]:
 			for token in token_list:
-				if token in unigrams:
-					unigrams[token] += 1
-				else:
-					unigrams[token] = 1
+				unigrams[token] = unigrams.get(token, 0) + 1
 	
 	ulist = list(unigrams.items())
 	ulist.sort(key=lambda t: t[1], reverse=True)
