@@ -3,7 +3,7 @@ import numpy as np
 import nltk
 
 REMOVE_RE = re.compile(' *<br \/> *')
-SEPARATE_RE = re.compile(' *(\.|!\?|!|\?) *')
+SEPARATE_RE = re.compile(' *(\.|!\?|!|\?|,) *')
 SPACES_RE = re.compile(' {2,}')
 ADDITIONAL_STOPWORDS = ['movie', 'film']
 
