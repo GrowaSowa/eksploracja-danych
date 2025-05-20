@@ -1,15 +1,20 @@
 import re
 import numpy as np
+import nltk
 
 REMOVE_RE = re.compile(' *<br \/> *')
 SEPARATE_RE = re.compile(' *(\.|!\?|!|\?) *')
 SPACES_RE = re.compile(' {2,}')
+ADDITIONAL_STOPWORDS = ['movie', 'film']
 
 def split_unigrams(data: dict[str, list[str]])->dict[str, list[list[str]]]:
+	stopwords = get_stopwords()
+
 	def process_tokens(line: str):
 		r = re.sub(REMOVE_RE, ' ', line)
 		r = re.sub(SEPARATE_RE, lambda m: f' {m[0].strip()} ', r).strip()
-		return re.sub(SPACES_RE, ' ', r).split(' ')
+		r = re.sub(SPACES_RE, ' ', r).split(' ')
+		return [unigram.lower() for unigram in r if unigram.lower() not in stopwords]
 
 	return {
 		"positive": [process_tokens(line) for line in data['positive']],
@@ -47,3 +52,10 @@ def get_unigram_presence_matrices(token_set_dict: dict[str, list[set[str]]], top
 		"positive": [get_unigram_presence_matrix(tset, top_unigrams) for tset in token_set_dict['positive']],
 		"negative": [get_unigram_presence_matrix(tset, top_unigrams) for tset in token_set_dict['negative']]
 	}
+
+def get_stopwords(download: bool = False):
+	if download:
+		nltk.download('stopwords')
+	stopwords = list(nltk.corpus.stopwords.words('english'))
+	stopwords.extend(ADDITIONAL_STOPWORDS)
+	return stopwords
