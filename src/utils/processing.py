@@ -1,6 +1,7 @@
 import re
 import numpy as np
 import nltk
+from nltk.stem import WordNetLemmatizer
 
 REMOVE_RE = re.compile(' *<br \/> *')
 SEPARATE_RE = re.compile(' *(\.|!\?|!|\?|,) *')
@@ -9,12 +10,13 @@ ADDITIONAL_STOPWORDS = ['movie', 'film', ',', '-']
 
 def split_unigrams(data: dict[str, list[str]])->dict[str, list[list[str]]]:
 	stopwords = get_stopwords()
-
+	lemmatizer = WordNetLemmatizer()
+	
 	def process_tokens(line: str):
 		r = re.sub(REMOVE_RE, ' ', line)
 		r = re.sub(SEPARATE_RE, lambda m: f' {m[0].strip()} ', r).strip()
 		r = re.sub(SPACES_RE, ' ', r).split(' ')
-		return [unigram.lower() for unigram in r if unigram.lower() not in stopwords]
+		return [lemmatizer.lemmatize(unigram.lower()) for unigram in r if unigram.lower() not in stopwords]
 
 	return {
 		"positive": [process_tokens(line) for line in data['positive']],
@@ -59,3 +61,7 @@ def get_stopwords(download: bool = False):
 	stopwords = list(nltk.corpus.stopwords.words('english'))
 	stopwords.extend(ADDITIONAL_STOPWORDS)
 	return stopwords
+
+def download_lemmatizer():
+	nltk.download('wordnet')
+	nltk.download('averaged_perceptron_tagger')
