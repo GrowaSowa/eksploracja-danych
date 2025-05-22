@@ -23,7 +23,6 @@ def split_unigrams(data: dict[str, list[str]])->dict[str, list[list[str]]]:
 		result[key] = [process_tokens(line) for line in data[key]]
 	return result
 
-
 def get_top_unigrams(n: int, token_list_dict: dict[str, list[list[str]]])->list[str]:
 	unigrams = {}
 
@@ -43,10 +42,6 @@ def get_unigram_sets(token_list_dict: dict[str, list[list[str]]])->dict[str, lis
 		result[key] = [set(token_list) for token_list in token_list_dict[key]]
 	return result
 
-def get_unigram_presence_matrix(token_set: set[str], top_unigrams: list[str])->np.ndarray:
-	return np.array([int(unigram in token_set) for unigram in top_unigrams])
-
-
 def get_unigram_presence_matrices(token_set_dict: dict[str, list[set[str]]], top_unigrams: list[str])->dict[str, np.ndarray]:
 	result = {}
 	for key in token_set_dict:
@@ -55,6 +50,10 @@ def get_unigram_presence_matrices(token_set_dict: dict[str, list[set[str]]], top
 			mtx[i] = get_unigram_presence_matrix(tset, top_unigrams)
 		result[key] = mtx
 	return result
+
+
+def get_unigram_presence_matrix(token_set: set[str], top_unigrams: list[str])->np.ndarray:
+	return np.array([int(unigram in token_set) for unigram in top_unigrams])
 
 def get_stopwords():
 	stopwords = list(nltk.corpus.stopwords.words('english'))
