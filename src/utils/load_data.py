@@ -3,14 +3,16 @@ import numpy as np
 import sys
 import os
 import random
+import asyncio
 
-def load_reviews(n: int)->dict[str, list[str]]:
+async def load_reviews(n: int)->dict[str, list[str]]:
+	negative, positive = await asyncio.gather(load_negative(n), load_positive(n))
 	return {
-		"negative": load_negative(n),
-		"positive": load_positive(n)
+		"negative": negative,
+		"positive": positive
 	}
 
-def load_positive(n: int)->list[str]:
+async def load_positive(n: int)->list[str]:
 	train_pos = ['./data/aclImdb/train/pos/' + fname for fname in os.listdir('./data/aclImdb/train/pos')]
 	test_pos = ['./data/aclImdb/test/pos/'+fname for fname in os.listdir('./data/aclImdb/test/pos')]
 
@@ -21,7 +23,7 @@ def load_positive(n: int)->list[str]:
 	content = [get_content(fname) for fname in positive[:n]]
 	return content
 
-def load_negative(n: int)->list[str]:
+async def load_negative(n: int)->list[str]:
 	train_neg = ['./data/aclImdb/train/neg/' + fname for fname in os.listdir('./data/aclImdb/train/neg')]
 	test_neg = ['./data/aclImdb/test/neg/' + fname for fname in os.listdir('./data/aclImdb/test/neg')]
 

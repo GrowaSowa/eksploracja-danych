@@ -8,9 +8,9 @@ from timeit import default_timer as timer
 N = 1000
 N_UNIGRAMS = 3000
 
-def main():
+async def main():
 	s_load = timer()
-	data = load_reviews(N)
+	data = await load_reviews(N)
 	e_load = timer()
 
 	s_process = timer()
@@ -56,4 +56,4 @@ def main():
 	print(f"training: {e_train - s_train}")
 
 if __name__ == "__main__":
-	main()
+	asyncio.run(main())
