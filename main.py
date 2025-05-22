@@ -19,34 +19,15 @@ async def main():
 
 	s_process = timer()
 	split_data = split_unigrams(data)
-
 	set_data = get_unigram_sets(split_data)
-
 	top_u = get_top_unigrams(N_UNIGRAMS, split_data)
-
 	mtx = get_unigram_presence_matrices(set_data, top_u)
-	e_process = timer()
 
-	s_split = timer()
 	x_train = np.concatenate([mtx['positive_train'], mtx['negative_train']])
 	y_train = np.concatenate([np.ones(TRAIN_SIZE), np.zeros(TRAIN_SIZE)])
-
 	x_test = np.concatenate([mtx['positive_test'], mtx['negative_test']])
 	y_test = np.concatenate([np.ones(TEST_SIZE), np.zeros(TEST_SIZE)])
-	# x_train = mtx['positive'][:TRAIN_SIZE]
-	# x_train.extend(mtx['negative'][:TRAIN_SIZE])
-	# y_train = [1 if i < TRAIN_SIZE else 0 for i in range(TRAIN_SIZE*2)]
-
-	# x_test = mtx['positive'][TRAIN_SIZE : TRAIN_SIZE+TEST_SIZE]
-	# x_test.extend(mtx['negative'][TRAIN_SIZE : TRAIN_SIZE+TEST_SIZE])
-	# y_test = [1 if i < TEST_SIZE else 0 for i in range(TEST_SIZE*2)]
-
-	# x_train = pd.DataFrame(x_train)
-	# y_train = np.array(y_train)
-
-	# x_test = pd.DataFrame(x_test)
-	# y_test = np.array(y_test)
-	e_split = timer()
+	e_process = timer()
 
 	s_nb_train = timer()
 	nb = GaussianNB()
@@ -66,7 +47,6 @@ async def main():
 
 	print(f"loading: {e_load - s_load}")
 	print(f"processing: {e_process - s_process}")
-	print(f"splitting: {e_split - s_split}")
 	print(f"NB training: {e_nb_train - s_nb_train}")
 	print(f"SVM training: {e_svm_train - s_svm_train}")
 
