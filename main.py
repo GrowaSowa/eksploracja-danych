@@ -28,12 +28,10 @@ async def main():
 	e_process = timer()
 
 	s_split = timer()
-	x_train = pd.concat([pd.DataFrame(mtx['positive_train']),
-					 pd.DataFrame(mtx['negative_train'])])
+	x_train = np.concatenate([mtx['positive_train'], mtx['negative_train']])
 	y_train = np.concatenate([np.ones(TRAIN_SIZE), np.zeros(TRAIN_SIZE)])
 
-	x_test = pd.concat([pd.DataFrame(mtx['positive_test']),
-						pd.DataFrame(mtx['negative_test'])])
+	x_test = np.concatenate([mtx['positive_test'], mtx['negative_test']])
 	y_test = np.concatenate([np.ones(TEST_SIZE), np.zeros(TEST_SIZE)])
 	# x_train = mtx['positive'][:TRAIN_SIZE]
 	# x_train.extend(mtx['negative'][:TRAIN_SIZE])

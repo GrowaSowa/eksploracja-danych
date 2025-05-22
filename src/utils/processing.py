@@ -47,10 +47,13 @@ def get_unigram_presence_matrix(token_set: set[str], top_unigrams: list[str])->n
 	return np.array([int(unigram in token_set) for unigram in top_unigrams])
 
 
-def get_unigram_presence_matrices(token_set_dict: dict[str, list[set[str]]], top_unigrams: list[str])->dict[str, list[np.ndarray]]:
+def get_unigram_presence_matrices(token_set_dict: dict[str, list[set[str]]], top_unigrams: list[str])->dict[str, np.ndarray]:
 	result = {}
 	for key in token_set_dict:
-		result[key] = [get_unigram_presence_matrix(tset, top_unigrams) for tset in token_set_dict[key]]
+		mtx = np.zeros((len(token_set_dict[key]), len(top_unigrams)))
+		for i, tset in enumerate(token_set_dict[key]):
+			mtx[i] = get_unigram_presence_matrix(tset, top_unigrams)
+		result[key] = mtx
 	return result
 
 def get_stopwords():
