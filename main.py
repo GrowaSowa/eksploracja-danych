@@ -1,6 +1,7 @@
 from src.utils.load_data import *
 from src.utils.processing import *
 from sklearn.naive_bayes import GaussianNB
+from sklearn import svm
 import pandas as pd
 
 from timeit import default_timer as timer
@@ -42,18 +43,27 @@ async def main():
 	y_test = np.array(y_test)
 	e_split = timer()
 
-	s_train = timer()
+	s_nb_train = timer()
 	nb = GaussianNB()
 	nb.fit(x_train, y_train)
-	e_train = timer()
+	e_nb_train = timer()
 	y_pred = nb.predict(x_test)
 	n_correct = (y_test == y_pred).sum()
-	print(f'Accuracy: {n_correct*100/x_test.shape[0]}% {n_correct}/{x_test.shape[0]}')
+	print(f'NaiveBayes accuracy: {n_correct*100/x_test.shape[0]}% {n_correct}/{x_test.shape[0]}')
+
+	s_svm_train = timer()
+	clf = svm.SVC()
+	clf.fit(x_train, y_train)
+	e_svm_train = timer()
+	y_pred = clf.predict(x_test)
+	n_correct = (y_test == y_pred).sum()
+	print(f"SVM accuracy: {n_correct*100/x_test.shape[0]}% {n_correct}/{x_test.shape[0]}")
 
 	print(f"loading: {e_load - s_load}")
 	print(f"processing: {e_process - s_process}")
 	print(f"splitting: {e_split - s_split}")
-	print(f"training: {e_train - s_train}")
+	print(f"NB training: {e_nb_train - s_nb_train}")
+	print(f"SVM training: {e_svm_train - s_svm_train}")
 
 if __name__ == "__main__":
 	asyncio.run(main())
