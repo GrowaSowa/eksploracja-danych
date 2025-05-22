@@ -5,11 +5,14 @@ import os
 import random
 import asyncio
 
-async def load_reviews(n: int)->dict[str, list[str]]:
+async def load_reviews(n_train: int, n_test)->dict[str, list[str]]:
+	n = n_train + n_test
 	negative, positive = await asyncio.gather(load_negative(n), load_positive(n))
 	return {
-		"negative": negative,
-		"positive": positive
+		"negative_train": negative[:n_train],
+		"negative_test": negative[n_train : n],
+		"positive_train": positive[:n_train],
+		"positive_test": positive[n_train : n]
 	}
 
 async def load_positive(n: int)->list[str]:

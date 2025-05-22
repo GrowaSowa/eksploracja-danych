@@ -6,12 +6,15 @@ import pandas as pd
 
 from timeit import default_timer as timer
 
-N = 1000
+N = 1200
 N_UNIGRAMS = 3000
+
+TRAIN_SIZE = N*3//4
+TEST_SIZE = N//4
 
 async def main():
 	s_load = timer()
-	data = await load_reviews(N)
+	data = await load_reviews(TRAIN_SIZE, TEST_SIZE)
 	e_load = timer()
 
 	s_process = timer()
@@ -24,23 +27,27 @@ async def main():
 	mtx = get_unigram_presence_matrices(set_data, top_u)
 	e_process = timer()
 
-	TRAIN_SIZE = N*3//4
-	TEST_SIZE = N//4
-
 	s_split = timer()
-	x_train = mtx['positive'][:TRAIN_SIZE]
-	x_train.extend(mtx['negative'][:TRAIN_SIZE])
-	y_train = [1 if i < TRAIN_SIZE else 0 for i in range(TRAIN_SIZE*2)]
+	x_train = pd.concat([pd.DataFrame(mtx['positive_train']),
+					 pd.DataFrame(mtx['negative_train'])])
+	y_train = np.concatenate([np.ones(TRAIN_SIZE), np.zeros(TRAIN_SIZE)])
 
-	x_test = mtx['positive'][TRAIN_SIZE : TRAIN_SIZE+TEST_SIZE]
-	x_test.extend(mtx['negative'][TRAIN_SIZE : TRAIN_SIZE+TEST_SIZE])
-	y_test = [1 if i < TEST_SIZE else 0 for i in range(TEST_SIZE*2)]
+	x_test = pd.concat([pd.DataFrame(mtx['positive_test']),
+						pd.DataFrame(mtx['negative_test'])])
+	y_test = np.concatenate([np.ones(TEST_SIZE), np.zeros(TEST_SIZE)])
+	# x_train = mtx['positive'][:TRAIN_SIZE]
+	# x_train.extend(mtx['negative'][:TRAIN_SIZE])
+	# y_train = [1 if i < TRAIN_SIZE else 0 for i in range(TRAIN_SIZE*2)]
 
-	x_train = pd.DataFrame(x_train)
-	y_train = np.array(y_train)
+	# x_test = mtx['positive'][TRAIN_SIZE : TRAIN_SIZE+TEST_SIZE]
+	# x_test.extend(mtx['negative'][TRAIN_SIZE : TRAIN_SIZE+TEST_SIZE])
+	# y_test = [1 if i < TEST_SIZE else 0 for i in range(TEST_SIZE*2)]
 
-	x_test = pd.DataFrame(x_test)
-	y_test = np.array(y_test)
+	# x_train = pd.DataFrame(x_train)
+	# y_train = np.array(y_train)
+
+	# x_test = pd.DataFrame(x_test)
+	# y_test = np.array(y_test)
 	e_split = timer()
 
 	s_nb_train = timer()
