@@ -18,10 +18,10 @@ def split_unigrams(data: dict[str, list[str]])->dict[str, list[list[str]]]:
 		r = re.sub(SPACES_RE, ' ', r).split(' ')
 		return [lemmatizer.lemmatize(unigram.lower()) for unigram in r if unigram.lower() not in stopwords]
 
-	return {
-		"positive": [process_tokens(line) for line in data['positive']],
-		"negative": [process_tokens(line) for line in data['negative']]
-	}
+	result = {}
+	for key in data:
+		result[key] = [process_tokens(line) for line in data[key]]
+	return result
 
 
 def get_top_unigrams(n: int, token_list_dict: dict[str, list[list[str]]])->list[str]:
@@ -38,20 +38,20 @@ def get_top_unigrams(n: int, token_list_dict: dict[str, list[list[str]]])->list[
 	return [item[0] for item in ulist[:n]] if n>0 else [item[0] for item in ulist]
 
 def get_unigram_sets(token_list_dict: dict[str, list[list[str]]])->dict[str, list[set[str]]]:
-	return {
-		"positive": [set(token_list) for token_list in token_list_dict['positive']],
-		"negative": [set(token_list) for token_list in token_list_dict['negative']]
-	}
+	result = {}
+	for key in token_list_dict:
+		result[key] = [set(token_list) for token_list in token_list_dict[key]]
+	return result
 
 def get_unigram_presence_matrix(token_set: set[str], top_unigrams: list[str])->np.ndarray:
 	return np.array([int(unigram in token_set) for unigram in top_unigrams])
 
 
 def get_unigram_presence_matrices(token_set_dict: dict[str, list[set[str]]], top_unigrams: list[str])->dict[str, list[np.ndarray]]:
-	return {
-		"positive": [get_unigram_presence_matrix(tset, top_unigrams) for tset in token_set_dict['positive']],
-		"negative": [get_unigram_presence_matrix(tset, top_unigrams) for tset in token_set_dict['negative']]
-	}
+	result = {}
+	for key in token_set_dict:
+		result[key] = [get_unigram_presence_matrix(tset, top_unigrams) for tset in token_set_dict[key]]
+	return result
 
 def get_stopwords():
 	stopwords = list(nltk.corpus.stopwords.words('english'))
