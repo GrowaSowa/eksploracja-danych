@@ -41,9 +41,9 @@ async def main(N: int, N_UNIGRAMS: int, TRAIN_SIZE: int, TEST_SIZE: int, show_ti
 
 	if show_timer:
 		print(f"loading: {e_load - s_load}")
-		print(f"processing: {e_process - s_process}")
-		print(f"NB training: {e_nb_train - s_nb_train}")
-		print(f"SVM training: {e_svm_train - s_svm_train}")
+		print(f"processing: {e_process - s_process}s")
+		print(f"NB training: {e_nb_train - s_nb_train}s")
+		print(f"SVM training: {e_svm_train - s_svm_train}s")
 
 if __name__ == "__main__":
 	N = 1200

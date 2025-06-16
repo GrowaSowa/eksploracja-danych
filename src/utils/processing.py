@@ -3,9 +3,9 @@ import numpy as np
 import nltk
 from nltk.stem import WordNetLemmatizer
 
-REMOVE_RE = re.compile(' *<br \/> *')
-SEPARATE_RE = re.compile(' *(\.|!\?|!|\?|,) *')
-SPACES_RE = re.compile(' {2,}')
+REMOVE_RE = re.compile(r' *<br \/> *')
+SEPARATE_RE = re.compile(r' *(\.|!\?|!|\?|,) *')
+SPACES_RE = re.compile(r' {2,}')
 ADDITIONAL_STOPWORDS = ['movie', 'film', ',', '-', '.']
 
 def split_unigrams(data: dict[str, list[str]])->dict[str, list[list[str]]]:
