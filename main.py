@@ -6,13 +6,7 @@ import pandas as pd
 
 from timeit import default_timer as timer
 
-N = 1200
-N_UNIGRAMS = 3000
-
-TRAIN_SIZE = N*3//4
-TEST_SIZE = N//4
-
-async def main():
+async def main(N: int, N_UNIGRAMS: int, TRAIN_SIZE: int, TEST_SIZE: int, show_timer: bool = False):
 	s_load = timer()
 	data = await load_reviews(TRAIN_SIZE, TEST_SIZE)
 	e_load = timer()
@@ -45,10 +39,16 @@ async def main():
 	n_correct = (y_test == y_pred).sum()
 	print(f"SVM accuracy: {n_correct*100/x_test.shape[0]}% {n_correct}/{x_test.shape[0]}")
 
-	print(f"loading: {e_load - s_load}")
-	print(f"processing: {e_process - s_process}")
-	print(f"NB training: {e_nb_train - s_nb_train}")
-	print(f"SVM training: {e_svm_train - s_svm_train}")
+	if show_timer:
+		print(f"loading: {e_load - s_load}")
+		print(f"processing: {e_process - s_process}")
+		print(f"NB training: {e_nb_train - s_nb_train}")
+		print(f"SVM training: {e_svm_train - s_svm_train}")
 
 if __name__ == "__main__":
-	asyncio.run(main())
+	N = 1200
+	N_UNIGRAMS = 3000
+
+	TRAIN_SIZE = N*3//4
+	TEST_SIZE = N//4
+	asyncio.run(main(N, N_UNIGRAMS, TRAIN_SIZE, TEST_SIZE, True))
