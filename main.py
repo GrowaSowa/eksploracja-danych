@@ -6,7 +6,7 @@ import pandas as pd
 
 from timeit import default_timer as timer
 
-async def main(N: int, N_UNIGRAMS: int, TRAIN_SIZE: int, TEST_SIZE: int, show_timer: bool = False):
+async def main(N: int, N_UNIGRAMS: int, TRAIN_SIZE: int, TEST_SIZE: int, show_timer: bool = False, use_linear_svm: bool = False):
 	s_load = timer()
 	data = await load_reviews(TRAIN_SIZE, TEST_SIZE)
 	e_load = timer()
@@ -32,7 +32,7 @@ async def main(N: int, N_UNIGRAMS: int, TRAIN_SIZE: int, TEST_SIZE: int, show_ti
 	print(f'NaiveBayes accuracy: {n_correct*100/x_test.shape[0]}% {n_correct}/{x_test.shape[0]}')
 
 	s_svm_train = timer()
-	clf = svm.SVC()
+	clf = svm.SVC() if not use_linear_svm else svm.LinearSVC()
 	clf.fit(x_train, y_train)
 	e_svm_train = timer()
 	y_pred = clf.predict(x_test)
