@@ -6,7 +6,7 @@ import pandas as pd
 
 from timeit import default_timer as timer
 
-async def main(N: int, N_UNIGRAMS: int, TRAIN_SIZE: int, TEST_SIZE: int, show_timer: bool = False, use_linear_svm: bool = False):
+async def main(N_UNIGRAMS: int, TRAIN_SIZE: int, TEST_SIZE: int, show_timer: bool = False, use_linear_svm: bool = False):
 	s_load = timer()
 	data = await load_reviews(TRAIN_SIZE, TEST_SIZE)
 	e_load = timer()
@@ -51,4 +51,4 @@ if __name__ == "__main__":
 
 	TRAIN_SIZE = N*3//4
 	TEST_SIZE = N//4
-	asyncio.run(main(N, N_UNIGRAMS, TRAIN_SIZE, TEST_SIZE, True))
+	asyncio.run(main(N_UNIGRAMS, TRAIN_SIZE, TEST_SIZE, True))
