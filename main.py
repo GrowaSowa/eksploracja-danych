@@ -2,7 +2,6 @@ from src.utils.load_data import *
 from src.utils.processing import *
 from sklearn.naive_bayes import GaussianNB
 from sklearn import svm
-import pandas as pd
 
 from timeit import default_timer as timer
 
@@ -46,7 +45,7 @@ async def main(N_UNIGRAMS: int, TRAIN_SIZE: int, TEST_SIZE: int, show_timer: boo
 		print(f"SVM training: {e_svm_train - s_svm_train}s")
 
 if __name__ == "__main__":
-	N = 1200
+	N = 400
 	N_UNIGRAMS = 3000
 
 	TRAIN_SIZE = N*3//4
