@@ -1,7 +1,9 @@
 # eksploracja-danych
 
 ## Instrukcja użycia
-Głównym program jest zawarty w procedurze `main()` z pliku `main.py`.
+Głównym program jest zawarty w procedurze `main()` z pliku `main.py`. Można go także przywołać z poziomu `explore.ipynb`.
+
+Upewnij się że lemmatizer i lista stopwordów są pobrane. W razie potrzeby można to zrobić za pomocą procedur `download_lemmatizer()` i `download_stopwords()` z `src/utils/processing.py` (także dostępne z poziomu `explore.ipynb`).
 
 ### Uruchamianie programu
 `main(N_UNIGRAMS: int, TRAIN_SIZE: int, TEST_SIZE: int, show_timer: bool = False, use_linear_svm: bool = False)`
